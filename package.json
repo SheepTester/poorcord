@@ -1,0 +1,20 @@
+{
+  "name": "poorcord",
+  "version": "1.0.0",
+  "description": "A highly verbose Discord bot configuration language in TypeScript using Nearley",
+  "main": "built/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SheepTester/poorcord.git"
+  },
+  "author": "SheepTester",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SheepTester/poorcord/issues"
+  },
+  "homepage": "https://github.com/SheepTester/poorcord#readme"
+}
