@@ -17,7 +17,9 @@
     variable: /[a-zA-Z]/,
     sumOp: ['+', '-'],
     productOp: ['*', '/', '%'],
-    exponentOp: ['^']
+    exponentOp: ['^'],
+    openParen: ['('],
+    closeParen: [')']
   })
 %}
 
@@ -28,11 +30,11 @@ main -> _ expression _ {% ([, expression]) => expression %}
 expression -> sum {% id %}
 
 sum ->
-    sum _ %sumOp _ product {% ([a, , [{ text: type }], , b]) => ({ type, a, b }) %}
+    sum _ %sumOp _ product {% ([a, , { text: type }, , b]) => ({ type, a, b }) %}
   | product {% id %}
 
 product ->
-    product _ %productOp _ exponent {% ([a, , [{ text: type }], , b]) => ({ type, a, b }) %}
+    product _ %productOp _ exponent {% ([a, , { text: type }, , b]) => ({ type, a, b }) %}
   | product _ exponentNotNumber {% ([a, , b]) => ({ type: '*', a, b }) %}
   | exponent {% id %}
 
@@ -55,10 +57,10 @@ valueNotNumber ->
   | wrappedExpression {% id %}
 
 function -> %functionName _ wrappedExpression {% ([{ text }, , expression]) => ({
-  type: 'fn' + text.join(''),
+  type: 'fn' + text,
   expression
 }) %}
 
-wrappedExpression -> "(" _ expression _ ")" {% ([, , expression]) => expression %}
+wrappedExpression -> %openParen _ expression _ %closeParen {% ([, , expression]) => expression %}
 
 _ -> %whitespace:? {% () => null %}

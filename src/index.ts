@@ -11,7 +11,7 @@ function isGrammar (grammarID: string): grammarID is GrammarID {
 async function main (): Promise<void> {
   const answers = ask('Input: ', `Which grammar to use?\n${
     Object.keys(grammars).map(id => `- ${id}\n`).join('')
-  }`)
+  }> `)
   const { value: grammarID } = await answers.next()
   if (isGrammar(grammarID)) {
     const grammar: Grammar = Grammar.fromCompiled(grammars[grammarID])
@@ -23,6 +23,7 @@ async function main (): Promise<void> {
         console.log(JSON.stringify(parser.results, null, 2) + '\n')
       } catch (err) {
         console.error(err)
+        console.log()
       }
     }
     // For some reason TypeScript doesn't recognize that `ask` never returns,
