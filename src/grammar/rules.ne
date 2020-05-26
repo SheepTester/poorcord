@@ -1,3 +1,5 @@
+@preprocessor typescript
+
 units[SINGULAR, PLURAL] -> "1" _ $SINGULAR | countingNumNotOne _ $PLURAL
 
 main -> (script _):* script

@@ -4,10 +4,14 @@
   "description": "A highly verbose Discord bot configuration language in TypeScript using Nearley",
   "main": "built/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node built/index.js",
+    "build": "npm run build:ts & npm run build:ne",
+    "build:ts": "tsc",
+    "build:ne": "sh ./compile-all-nearleys.sh",
+    "main": "node built/index.js",
+    "start": "npm run build & npm run main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SheepTester/poorcord.git"
@@ -20,6 +24,7 @@
   "homepage": "https://github.com/SheepTester/poorcord#readme",
   "dependencies": {
     "@types/nearley": "^2.11.1",
+    "@types/node": "^14.0.5",
     "nearley": "^2.19.3"
   }
 }

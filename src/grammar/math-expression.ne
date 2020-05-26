@@ -1,3 +1,5 @@
+@preprocessor typescript
+
 main -> _ expression _ {% data => data[1] %}
 
 expression -> sum {% id %}
