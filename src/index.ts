@@ -9,12 +9,19 @@ function isGrammar (grammarID: string): grammarID is GrammarID {
 }
 
 async function main (): Promise<void> {
-  const answers = ask('Input: ')
-  const { value: grammarID } = await answers.next(`Which grammar to use? (${Object.keys(grammars).join(', ')})`)
+  const answers = ask('Input: ', `Which grammar to use? (${Object.keys(grammars).join(', ')}) `)
+  const { value: grammarID } = await answers.next()
   if (isGrammar(grammarID)) {
-    const parser = new Parser(Grammar.fromCompiled(grammars[grammarID]))
+    const grammar: Grammar = Grammar.fromCompiled(grammars[grammarID])
     for await (const input of answers) {
-      parser.feed(input)
+      try {
+        const parser = new Parser(grammar)
+        parser.feed(input)
+        parser.finish()
+        console.log(parser.results)
+      } catch (err) {
+        console.error(err)
+      }
     }
     // For some reason TypeScript doesn't recognize that `ask` never returns,
     // but whatever
@@ -24,6 +31,7 @@ async function main (): Promise<void> {
 }
 
 main()
-  .catch((err: boolean) => {
-    console.log(err)
+  .catch((err: Error) => {
+    console.error(err)
+    process.exit()
   })

@@ -3,7 +3,9 @@
     "outDir": "./built",
     "allowJs": true,
     "target": "esnext",
-    "strict": true
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "CommonJS"
   },
   "include": [
     "./src/**/*"
