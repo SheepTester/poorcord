@@ -1,31 +1,6 @@
 @preprocessor typescript
 
-@{%
-  import * as moo from 'moo'
-
-  const lexer: moo.Lexer = moo.compile({
-    keyword: ['pi', 'e']
-  })
-
-  // HACK
-  interface LexerIntermediate {
-    // This is a function rather than an arrow function which apparently
-    // allows it to be casted
-    formatError(token: NearleyToken): string
-
-    reset: (chunk: string, info: any) => void
-    next: () => NearleyToken | undefined
-    save: () => any
-    has: (tokenType: string) => boolean
-  }
-
-  // This will then be successfully converted to a NearleyLexer!
-  const intermediateLexer: LexerIntermediate = lexer
-%}
-
-@lexer intermediateLexer
-
-main -> _ expression _ {% data => data[1] %}
+main -> _ expression _ {% ([, expression]) => expression %}
 
 expression -> sum {% id %}
 
@@ -55,23 +30,25 @@ valueNotNumber ->
   | function {% id %}
   | wrappedExpression {% id %}
 
-signedNumber -> ("+" | "-"):? scientificNotation {% ([sign, number]) => (sign + number) %}
+signedNumber -> sign scientificNotation {% ([sign, number]) => +((sign || '') + number) %}
 
 scientificNotation ->
     number {% id %}
-  | number "e" [0-9]:+ {% data => data.join('') %}
+  | number "e" sign [0-9]:+ {% data => data.join('') %}
+
+sign -> ("+" | "-"):?
 
 number ->
     [0-9]:+ ("." [0-9]:*):? {% data => data.join('') %}
   | "." [0-9]:+ {% data => data.join('') %}
 
-variable -> [a-z] {% ([variable]) => variable %}
+variable -> [a-zA-Z] {% ([variable]) => variable %}
 
 function -> [a-zA-Z]:+ _ wrappedExpression {% ([fnName, , expression]) => ({
   type: 'fn' + fnName.join(''),
   expression
 }) %}
 
-wrappedExpression -> "(" _ expression _ ")" {% data => data[2] %}
+wrappedExpression -> "(" _ expression _ ")" {% ([, , expression]) => expression %}
 
 _ -> [\s]:* {% () => null %}

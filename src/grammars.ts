@@ -1,3 +1,5 @@
 export { default as test } from './grammar/test'
 export { default as mathExpression } from './grammar/math-expression'
+export { default as mathExpression2 } from './grammar/math-expression-lexer'
 export { default as rules } from './grammar/rules'
+export { default as nearleyExampleMoo } from './grammar/nearley-example-moo'

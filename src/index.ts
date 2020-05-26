@@ -9,7 +9,9 @@ function isGrammar (grammarID: string): grammarID is GrammarID {
 }
 
 async function main (): Promise<void> {
-  const answers = ask('Input: ', `Which grammar to use? (${Object.keys(grammars).join(', ')}) `)
+  const answers = ask('Input: ', `Which grammar to use?\n${
+    Object.keys(grammars).map(id => `- ${id}\n`).join('')
+  }`)
   const { value: grammarID } = await answers.next()
   if (isGrammar(grammarID)) {
     const grammar: Grammar = Grammar.fromCompiled(grammars[grammarID])
@@ -18,7 +20,7 @@ async function main (): Promise<void> {
         const parser = new Parser(grammar)
         parser.feed(input)
         parser.finish()
-        console.log(parser.results)
+        console.log(JSON.stringify(parser.results, null, 2) + '\n')
       } catch (err) {
         console.error(err)
       }
